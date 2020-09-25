@@ -12,6 +12,8 @@ class Simulator:
 
     def run(self):
         for observation in self.time_series:
+            # TODO is is confusing that the time and moer passed are not the current time?
+            # TODO skip values < start date and > end date
             is_on = self.model.update(observation.time, observation.moer)
             self.history.append(is_on)
 
