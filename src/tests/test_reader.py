@@ -1,4 +1,4 @@
-from reader import read_data_file, Datum
+from reader import read_time_series, parse_line, Observation
 from datetime import datetime
 
 import pytest
@@ -17,13 +17,20 @@ def data_dir(tmp_path_factory):
     return path
 
 
-class TestReadDataFile:
+class TestParseLine:
+    def test_successfully_parses_expected_formatt(self):
+        expected = Observation(datetime(2019, 2, 28, 0, 0), 466)
+        result = parse_line("2019-02-28 00:00:00+00:00,466\n")
+        assert expected == result
+
+
+class TestReadTimeSeries:
     def test_first_five_lines_of_provided_data(self, data_dir):
         expected = [
-            Datum(datetime(2019, 2, 28, 0, 0), 466),
-            Datum(datetime(2019, 2, 28, 0, 5), 426),
-            Datum(datetime(2019, 2, 28, 0, 10), 423),
-            Datum(datetime(2019, 2, 28, 0, 15), 442),
+            Observation(datetime(2019, 2, 28, 0, 0), 466),
+            Observation(datetime(2019, 2, 28, 0, 5), 426),
+            Observation(datetime(2019, 2, 28, 0, 10), 423),
+            Observation(datetime(2019, 2, 28, 0, 15), 442),
         ]
-        result = read_data_file(data_dir / "MOERS.csv")
+        result = read_time_series(data_dir / "MOERS.csv")
         assert expected == result
