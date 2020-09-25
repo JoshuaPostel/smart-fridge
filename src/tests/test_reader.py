@@ -22,8 +22,8 @@ class TestReadDataFile:
         expected = [
             Datum(datetime(2019, 2, 28, 0, 0), 466),
             Datum(datetime(2019, 2, 28, 0, 5), 426),
-            Datum(datetime(2019, 2, 28, 0, 10), 426),
-            Datum(datetime(2019, 2, 28, 0, 25), 426),
+            Datum(datetime(2019, 2, 28, 0, 10), 423),
+            Datum(datetime(2019, 2, 28, 0, 15), 442),
         ]
         result = read_data_file(data_dir / "MOERS.csv")
         assert expected == result
