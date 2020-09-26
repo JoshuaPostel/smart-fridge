@@ -1,27 +1,48 @@
 from reader import read_time_series
+from datetime import timedelta
+
+from collections import namedtuple
+
+Event = namedtuple("event", ["time", "moer", "is_on"])
 
 
 class Simulator:
-    def __init__(self, model, input_file, start_date, end_date, power_consumption):
+    def __init__(
+        self,
+        model,
+        input_file,
+        start_date,
+        end_date,
+        horizon,
+        time_delta,
+        power_in_watts,
+    ):
 
         self.time_series = read_time_series(input_file)
         self.start_date = start_date
         self.end_date = end_date
         self.model = model
-        self.history = []
+        self.events = []
+        self.horizon_n_timesteps = int(horizon / time_delta)
 
     def run(self):
-        for observation in self.time_series:
-            # TODO is is confusing that the time and moer passed are not the current time?
-            # TODO skip values < start date and > end date
-            is_on = self.model.update(observation.time, observation.moer)
-            self.history.append(is_on)
+        for idx, observation in enumerate(self.time_series):
+            if self.start_date <= observation.time <= self.end_date:
+
+                is_on = self.model.action(observation.time)
+                event = Event(observation.time, observation.moer, is_on)
+                self.events.append(event)
+
+                forecast = self.time_series[idx + self.horizon_n_timesteps]
+                self.model.update_horizon(forecast.time, forecast.moer)
 
     def plot(self):
         pass
 
     def total_runtime(self):
-        return self.history.sum() * 5
+        # TODO fiture out what unit to return
+        event_length = self.time_delta / timedelta(hours=1)
+        return (event.is_on for event in self.events).sum() * event_length
 
     def total_co2(self):
         pass
