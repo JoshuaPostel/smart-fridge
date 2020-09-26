@@ -1,4 +1,6 @@
-from utils import temprature_delta
+from utils import temprature_delta, attributed_kg_co2
+
+import pytest
 
 
 class TestTempratureDelta:
@@ -22,3 +24,9 @@ class TestTempratureDelta:
         )
         hour_delta = five_minute_delta * 12
         assert hour_delta == -2.5
+
+
+class TestAttributedCO2:
+    def test_500_moer_and_200_watt_for_five_minutes(self):
+        co2 = attributed_kg_co2(proportion_on=1, moer=500, kwh=0.2 / 12)
+        assert co2 == pytest.approx(8.333, 0.001)

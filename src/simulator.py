@@ -3,7 +3,7 @@ from reader import read_time_series
 from datetime import timedelta
 from collections import namedtuple
 
-Event = namedtuple("event", ["time", "moer", "is_on"])
+Event = namedtuple("event", ["time", "moer", "proportion_on"])
 
 
 class Simulator:
@@ -33,7 +33,7 @@ class Simulator:
     def total_runtime(self):
         # TODO fiture out what unit to return
         event_length = self.time_delta / timedelta(hours=1)
-        return (event.is_on for event in self.events).sum() * event_length
+        return (event.proportion_on for event in self.events).sum() * event_length
 
     def total_co2(self):
         pass

@@ -1,7 +1,8 @@
 from models import NaiveModel
 from simulator import Simulator
-from datetime import datetime, timedelta
+from plotter import plot_refrigerator
 
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
@@ -16,3 +17,5 @@ sim = Simulator(
 
 sim.run()
 print(sim.events[:10])
+
+plot_refrigerator(sim.events, 0.2)
