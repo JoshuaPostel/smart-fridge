@@ -1,6 +1,6 @@
 from collections import namedtuple
 from datetime import datetime
-import logging
+from logger import logger
 
 Observation = namedtuple("Observation", ["time", "moer"])
 
@@ -19,5 +19,5 @@ def read_time_series(path):
                 observation = parse_line(line)
                 time_series.append(observation)
             except (IndexError, ValueError):
-                logging.warning(f"{path}: could not parse line: {line}")
+                logger.warning(f"{path}: could not parse line: {line}")
     return time_series
