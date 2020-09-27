@@ -27,6 +27,6 @@ class TestTempratureDelta:
 
 
 class TestAttributedCO2:
-    def test_500_moer_and_200_watt_for_five_minutes(self):
+    def test_500_moer_and_200_watts_for_five_minutes(self):
         co2 = attributed_kg_co2(proportion_on=1, moer=500, kwh=0.2 / 12)
         assert co2 == pytest.approx(8.333, 0.001)
