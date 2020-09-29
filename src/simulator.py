@@ -33,6 +33,6 @@ class Simulator:
 
     def total_co2(self, power_in_kw):
         return sum(
-            attributed_grams_co2(e.proportion_on, e.moer, power_in_kw)
-            for e in self.events
+            attributed_grams_co2(event.proportion_on, event.moer, power_in_kw)
+            for event in self.events
         )
