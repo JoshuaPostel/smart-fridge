@@ -1,6 +1,6 @@
 from reader import read_time_series
+from utils import attributed_grams_co2
 
-from datetime import timedelta
 from collections import namedtuple
 
 Event = namedtuple("event", ["time", "moer", "proportion_on"])
@@ -15,6 +15,7 @@ class Simulator:
         self.model = model
         self.events = []
         self.horizon_n_timesteps = int(horizon / time_delta)
+        self.time_delta = time_delta
 
     def run(self):
         for idx, observation in enumerate(self.time_series):
@@ -27,13 +28,11 @@ class Simulator:
                 forecast = self.time_series[idx + self.horizon_n_timesteps]
                 self.model.update_horizon(forecast.time, forecast.moer)
 
-    def plot(self):
-        pass
-
     def total_runtime(self):
-        # TODO fiture out what unit to return
-        event_length = self.time_delta / timedelta(hours=1)
-        return (event.proportion_on for event in self.events).sum() * event_length
+        return sum(event.proportion_on for event in self.events) * self.time_delta
 
-    def total_co2(self):
-        pass
+    def total_co2(self, power_in_kw):
+        return sum(
+            attributed_grams_co2(e.proportion_on, e.moer, power_in_kw)
+            for e in self.events
+        )
