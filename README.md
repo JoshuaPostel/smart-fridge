@@ -1,4 +1,4 @@
-# Watt-Time Takehome Project
+# Watt-Time Take Home Project
 
 expected stdout:
 ```
@@ -6,7 +6,7 @@ total associated CO2: 20.122 lbs
 total fridge run time: 10 days, 8:00:00
 ```
 
-## Run with python
+## Run with Python 3.6
 
 ```
 pip install -r requirements.txt
