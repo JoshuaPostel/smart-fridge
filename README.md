@@ -6,6 +6,8 @@ total associated CO2: 20.122 lbs
 total fridge run time: 10 days, 8:00:00
 ```
 
+![](output/refrigerator.png)
+
 ## Run with Python 3.6
 
 ```
