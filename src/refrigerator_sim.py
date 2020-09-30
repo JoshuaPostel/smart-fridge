@@ -55,8 +55,8 @@ sim = Simulator(
 
 sim.run()
 
-# TODO
-total_co2 = sim.total_co2(fridge_power_kw / 12)
+timesteps_per_hour = timedelta(hours=1) / timestep_duration
+total_co2 = sim.total_co2(fridge_power_kw / timesteps_per_hour)
 print(f"total associated CO2: {round(total_co2, 3)} lbs")
 
 total_runtime = sim.total_runtime()
