@@ -6,7 +6,8 @@ from reader import read_time_series
 from datetime import datetime, timedelta
 from pathlib import Path
 
-data_file = Path("/home/jpostel1/proj/watt-time/data/MOERS.csv")
+repo_root = Path(__file__).resolve().parent.parent
+data_file = repo_root / "data" / "MOERS.csv"
 horizon = [
     observation.moer
     for observation in read_time_series(data_file)
@@ -27,8 +28,7 @@ sim = Simulator(
     model=lp_model,
     input_file=data_file,
     start_date=datetime(2019, 3, 1),
-    # end_date=datetime(2019, 4, 1),
-    end_date=datetime(2019, 3, 2),
+    end_date=datetime(2019, 4, 1),
     horizon=timedelta(hours=1),
     time_delta=timedelta(minutes=5),
 )
@@ -43,7 +43,7 @@ print(f"total fridge run time: {total_runtime}")
 
 # TODO implement configs to avoid the amount of parameter passing
 plot_refrigerator(
-    output_file=Path("/home/jpostel1/proj/watt-time/src/refrigerator_plot.png"),
+    output_file=repo_root / "output" / "refrigerator.png",
     events=sim.events,
     power_in_kw=0.2,
     temp_delta_on=-10 / 12,
