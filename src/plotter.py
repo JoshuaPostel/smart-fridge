@@ -1,4 +1,4 @@
-from utils import temprature_delta, attributed_grams_co2
+from utils import temprature_delta, attributed_pounds_co2
 
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -14,10 +14,10 @@ def _get_tempratures(events, starting_temp, temp_delta_on, temp_delta_off):
     return tempratures[:-1]
 
 
-def _get_cumulative_grams_co2(moers, proportions_on, power_in_kw):
+def _get_cumulative_pounds_co2(moers, proportions_on, power_in_kw):
     cumulative_co2 = [0]
     for proportion_on, moer in zip(proportions_on, moers):
-        co2 = attributed_grams_co2(proportion_on, moer, power_in_kw / 12)
+        co2 = attributed_pounds_co2(proportion_on, moer, power_in_kw / 12)
         cumulative_co2.append(cumulative_co2[-1] + co2)
     return cumulative_co2[:-1]
 
@@ -37,8 +37,9 @@ def plot_refrigerator(
 
     times, moers, proportions_on = zip(*events)
     tempratures = _get_tempratures(events, starting_temp, temp_delta_on, temp_delta_off)
-    cumulative_co2_grams = _get_cumulative_grams_co2(moers, proportions_on, power_in_kw)
-    cumulative_co2_kg = [x / 1000 for x in cumulative_co2_grams]
+    cumulative_co2_pounds = _get_cumulative_pounds_co2(
+        moers, proportions_on, power_in_kw
+    )
 
     fig = plt.figure(figsize=(20, 10))
     host = fig.add_subplot(111)
@@ -50,13 +51,13 @@ def plot_refrigerator(
     host.set_xlim(min(times), max(times))
     host.set_ylim(temp_min * 0.95, temp_max * 1.05)
     par1.set_ylim(-max(moers) * 0.05, max(moers) * 1.05)
-    par2.set_ylim(-max(cumulative_co2_kg) * 0.05, max(cumulative_co2_kg) * 1.05)
+    par2.set_ylim(-max(cumulative_co2_pounds) * 0.05, max(cumulative_co2_pounds) * 1.05)
     par3.set_ylim(0, 50)
 
     host.set_xlabel("Date")
     host.set_ylabel("Temperature F°")
     par1.set_ylabel("MOER")
-    par2.set_ylabel("Cumulative CO2 kg")
+    par2.set_ylabel("Cumulative CO2 lbs")
     par3.set_ylabel("Plug Off/On")
 
     color1 = plt.cm.viridis(0)
@@ -66,7 +67,9 @@ def plot_refrigerator(
 
     p1, = host.plot(times, tempratures, color=color1, label="MOER")
     p2, = par1.plot(times, moers, color=color2, label="Temperature F°")
-    p3, = par2.plot(times, cumulative_co2_kg, color=color3, label="Cumulative CO2 kg")
+    p3, = par2.plot(
+        times, cumulative_co2_pounds, color=color3, label="Cumulative CO2 lbs"
+    )
     p4, = par3.plot(times, proportions_on, color=color4, label="Plug Off/On")
 
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))

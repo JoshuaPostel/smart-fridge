@@ -35,8 +35,8 @@ sim = Simulator(
 
 sim.run()
 
-total_co2 = round(sim.total_co2(0.2 / 12) / 1000, 3)
-print(f"total associated CO2: {total_co2} kg")
+total_co2 = round(sim.total_co2(0.2 / 12), 3)
+print(f"total associated CO2: {total_co2} lbs")
 
 total_runtime = sim.total_runtime()
 print(f"total fridge run time: {total_runtime}")

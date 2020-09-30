@@ -1,5 +1,5 @@
 from reader import read_time_series
-from utils import attributed_grams_co2
+from utils import attributed_pounds_co2
 
 from collections import namedtuple
 
@@ -33,6 +33,6 @@ class Simulator:
 
     def total_co2(self, power_in_kw):
         return sum(
-            attributed_grams_co2(event.proportion_on, event.moer, power_in_kw)
+            attributed_pounds_co2(event.proportion_on, event.moer, power_in_kw)
             for event in self.events
         )
