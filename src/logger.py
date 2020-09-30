@@ -4,7 +4,8 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-log_path = Path("/tmp/logs")
+repo_root = Path(__file__).resolve().parent.parent
+log_path = repo_root / "output"
 log_path.mkdir(parents=True, exist_ok=True)
 
 
@@ -19,4 +20,5 @@ logger.addHandler(file_handler)
 stdout_handler = logging.StreamHandler()
 stdout_format = logging.Formatter("%(asctime)s %(levelname)s: %(message)s", "%H:%M:%S")
 stdout_handler.setFormatter(stdout_format)
+stdout_handler.setLevel(logging.WARNING)
 logger.addHandler(stdout_handler)
