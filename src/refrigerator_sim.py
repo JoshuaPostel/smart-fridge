@@ -6,49 +6,69 @@ from reader import read_time_series
 from datetime import datetime, timedelta
 from pathlib import Path
 
+# TODO implement as a config file
+##############
+# parameters #
+##############
+initial_temprature = 33
+maximum_temprature = 43
+minimum_temprature = 33
+
+# temprature(t + 1) = temprature(t) + delta_off + (delta_on * fridge_on(t))
+# where fridge_on(t) -> [0,1]
+delta_on = -10 / 12
+delta_off = 5 / 12
+fridge_power_kw = 0.2
+
+start_date = datetime(2019, 3, 1)
+end_date = datetime(2019, 4, 1)
+
+forecast_duration = timedelta(hours=1)
+timestep_duration = timedelta(minutes=5)
+
+optimization_horizon_timesteps = 24
+##############
+
+
 repo_root = Path(__file__).resolve().parent.parent
-data_file = repo_root / "data" / "MOERS.csv"
-horizon = [
+
+observations = read_time_series(repo_root / "data" / "MOERS.csv")
+initial_forecast = [
     observation.moer
-    for observation in read_time_series(data_file)
-    if datetime(2019, 3, 1) <= observation.time < datetime(2019, 3, 1, 1)
+    for observation in observations
+    if start_date <= observation.time <= start_date + forecast_duration
 ]
 
 lp_model = LinearProgramming(
-    initial_horizon=horizon,
-    initial_temp=33,
-    temp_delta_on=-10 / 12,
-    temp_delta_off=5 / 12,
-    temp_min=33,
-    temp_max=43,
-    optimization_timesteps=24,
+    initial_forecast,
+    initial_temprature,
+    delta_on,
+    delta_off,
+    minimum_temprature,
+    maximum_temprature,
+    optimization_horizon_timesteps,
 )
 
 sim = Simulator(
-    model=lp_model,
-    input_file=data_file,
-    start_date=datetime(2019, 3, 1),
-    end_date=datetime(2019, 4, 1),
-    horizon=timedelta(hours=1),
-    time_delta=timedelta(minutes=5),
+    lp_model, observations, start_date, end_date, forecast_duration, timestep_duration
 )
 
 sim.run()
 
-total_co2 = round(sim.total_co2(0.2 / 12), 3)
-print(f"total associated CO2: {total_co2} lbs")
+# TODO
+total_co2 = sim.total_co2(fridge_power_kw / 12)
+print(f"total associated CO2: {round(total_co2, 3)} lbs")
 
 total_runtime = sim.total_runtime()
 print(f"total fridge run time: {total_runtime}")
 
-# TODO implement configs to avoid the amount of parameter passing
 plot_refrigerator(
-    output_file=repo_root / "output" / "refrigerator.png",
-    events=sim.events,
-    power_in_kw=0.2,
-    temp_delta_on=-10 / 12,
-    temp_delta_off=5 / 12,
-    temp_max=43,
-    temp_min=33,
-    starting_temp=33,
+    repo_root / "output" / "refrigerator.png",
+    sim.events,
+    fridge_power_kw,
+    delta_on,
+    delta_off,
+    maximum_temprature,
+    minimum_temprature,
+    initial_temprature,
 )
