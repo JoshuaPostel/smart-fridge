@@ -27,12 +27,19 @@ sim = Simulator(
     model=lp_model,
     input_file=data_file,
     start_date=datetime(2019, 3, 1),
-    end_date=datetime(2019, 4, 1),
+    # end_date=datetime(2019, 4, 1),
+    end_date=datetime(2019, 3, 2),
     horizon=timedelta(hours=1),
     time_delta=timedelta(minutes=5),
 )
 
 sim.run()
+
+total_co2 = round(sim.total_co2(0.2 / 12), 3)
+print(f"total associated CO2: {total_co2} lbs")
+
+total_runtime = sim.total_runtime()
+print(f"total fridge run time: {total_runtime}")
 
 # TODO implement configs to avoid the amount of parameter passing
 plot_refrigerator(
