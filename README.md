@@ -8,6 +8,8 @@ total fridge run time: 10 days, 8:00:00
 
 ![](output/refrigerator.png)
 
+Estimated time spent (not including research time): ~10 hours
+
 ## Run with Python 3.6
 
 ```
