@@ -4,12 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 
-def _get_tempratures(events, starting_temp, temp_delta_on, temp_delta_off):
-    tempratures = [starting_temp]
+def _get_tempratures(events, initial_temp, delta_on, delta_off):
+    tempratures = [initial_temp]
     for event in events:
-        temp_delta = temprature_delta(
-            event.proportion_on, temp_delta_on, temp_delta_off
-        )
+        temp_delta = temprature_delta(event.proportion_on, delta_on, delta_off)
         tempratures.append(tempratures[-1] + temp_delta)
     return tempratures[:-1]
 
@@ -22,21 +20,20 @@ def _get_cumulative_pounds_co2(moers, proportions_on, power_in_kw):
     return cumulative_co2[:-1]
 
 
-# not a big fan of multi-y-axis plots
 # modified version of: https://stackoverflow.com/a/45925049/6876077
 def plot_refrigerator(
     output_file,
     events,
     power_in_kw,
-    temp_delta_on,
-    temp_delta_off,
+    delta_on,
+    delta_off,
     temp_max,
     temp_min,
-    starting_temp,
+    initial_temp,
 ):
 
     times, moers, proportions_on = zip(*events)
-    tempratures = _get_tempratures(events, starting_temp, temp_delta_on, temp_delta_off)
+    tempratures = _get_tempratures(events, initial_temp, delta_on, delta_off)
     cumulative_co2_pounds = _get_cumulative_pounds_co2(
         moers, proportions_on, power_in_kw
     )
