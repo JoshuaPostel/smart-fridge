@@ -1,6 +1,13 @@
 from collections import namedtuple
 from datetime import datetime
-from logger import logger
+import logging.config
+
+from logger import logging_config
+
+
+logging.config.dictConfig(logging_config)
+logger = logging.getLogger(__name__)
+
 
 Observation = namedtuple("Observation", ["time", "moer"])
 
