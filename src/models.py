@@ -1,8 +1,12 @@
 from utils import temprature_delta
-from logger import logger
+from logger import logging_config
 
+import logging.config
 import numpy as np
 from scipy.optimize import linprog
+
+logging.config.dictConfig(logging_config)
+logger = logging.getLogger(__name__)
 
 
 class Naive:
