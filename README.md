@@ -21,8 +21,8 @@ python refrigerator_sim.py
 ## Run with Docker
 
 ```
-docker build -t watt-time .
-docker run -v /my/local/output/dir:/root/output watt-time
+docker build -t smart-fridge .
+docker run -v /my/local/output/dir:/root/output smart-fridge
 ```
 
 ## Model Description
