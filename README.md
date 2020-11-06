@@ -1,4 +1,4 @@
-# Watt-Time Take Home Project
+# Smart Fridge Project
 
 expected stdout:
 ```
