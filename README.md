@@ -1,4 +1,8 @@
-# Smart Fridge Project
+# Smart Fridge Take-Home Project:
+
+### Minimize the CO2 production of a fictional fridge using a linear programming model
+
+---
 
 expected stdout:
 ```
